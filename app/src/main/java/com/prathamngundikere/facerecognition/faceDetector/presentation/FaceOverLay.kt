@@ -23,19 +23,19 @@ fun FaceOverlay(
     Canvas(modifier = modifier.fillMaxSize()) {
         val scaleX = preViewWidth / imageWidth
         val scaleY = preViewHeight / imageHeight
+        val boxScaleFactor = 1.2f // Increase box size by 20%
         faces.forEach { face ->
             val rect = face.boundingBox()
 
-            // Scale factor to convert from image coordinates to preview coordinates
-
-
             // Scale and position the box
-            val left = rect.left * scaleX
-            val top = rect.top * scaleY
-            val width = rect.width() * scaleX
-            val height = rect.height() * scaleY
+            val width = rect.width() * scaleX * boxScaleFactor
+            val height = rect.height() * scaleY * boxScaleFactor
+            val centerX = rect.centerX() * scaleX
+            val centerY = rect.centerY() * scaleY
+            val left = centerX - width / 2
+            val top = centerY - height / 2
             drawRect(
-                color = Color.Red,
+                color = Color.Green,
                 topLeft = Offset(left, top),
                 size = Size(width, height),
                 style = Stroke(width = 4f)
