@@ -25,6 +25,7 @@ fun CameraPreview(
 
     val executor = Executors.newSingleThreadExecutor()
 
+
     Box(modifier = modifier) {
         AndroidView(
             modifier = modifier,
@@ -37,7 +38,7 @@ fun CameraPreview(
                     }
 
                     val cameraSelector = CameraSelector.Builder()
-                        .requireLensFacing(CameraSelector.LENS_FACING_FRONT)
+                        .requireLensFacing(CameraSelector.LENS_FACING_BACK)
                         .build()
 
                     val imageAnalyzer = ImageAnalysis.Builder()

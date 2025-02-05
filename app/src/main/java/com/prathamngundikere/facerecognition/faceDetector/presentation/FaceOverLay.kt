@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
@@ -25,6 +26,9 @@ fun FaceOverlay(
 ) {
     val context = LocalContext.current
     val boxColor = remember { Color(ContextCompat.getColor(context, R.color.teal_200)) }
+    val boxPaint = Paint()
+    boxPaint.color.green
+    boxPaint.strokeWidth = 8f
 
     Canvas(modifier = modifier) {
         results?.let {
@@ -34,11 +38,18 @@ fun FaceOverlay(
             onScaleFactorCalculated(scaleFactor)
 
             for (detection in it.detections()) {
+
+                val paddingBox = 20f
+
                 val boundingBox = detection.boundingBox()
-                val left = boundingBox.left * scaleFactor
-                val top = boundingBox.top * scaleFactor
-                val right = boundingBox.right * scaleFactor
-                val bottom = boundingBox.bottom * scaleFactor
+
+                val left = boundingBox.left * scaleFactor - paddingBox
+                val top = boundingBox.top * scaleFactor - paddingBox
+                val right = boundingBox.right * scaleFactor + paddingBox
+                val bottom = boundingBox.bottom * scaleFactor + paddingBox
+
+                val width = right - left
+                val height = bottom - top
 
                 Log.i("FaceOverlay", "The values - bounding box - $boundingBox left=$left bottom= $bottom")
 
@@ -46,7 +57,7 @@ fun FaceOverlay(
                 drawRect(
                     color = boxColor,
                     topLeft = Offset(left, top),
-                    size = Size(right - left, bottom - top),
+                    size = Size(width, height),
                     style = Stroke(width = 8f)
                 )
             }

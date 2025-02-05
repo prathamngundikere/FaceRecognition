@@ -31,12 +31,18 @@ class FaceRecognitionClassifier(
             val centerX = boundingBox.centerX().toInt()
             val centerY = boundingBox.centerY().toInt()
 
-            val newLeft = (centerX - maxSide / 2).coerceIn(0, rotatedBitmap.width - maxSide)
-            val newTop = (centerY - maxSide / 2).coerceIn(0, rotatedBitmap.height - maxSide)
+            var newLeft = 0
+            var newTop = 0
+            if (rotatedBitmap.width - maxSide > 0 && rotatedBitmap.height - maxSide > 0) {
+                newLeft = (centerX - maxSide / 2).coerceIn(0, rotatedBitmap.width - maxSide)
+                newTop = (centerY - maxSide / 2).coerceIn(0, rotatedBitmap.height - maxSide)
+            }
 
             try {
-                val faceBitmap = Bitmap.createBitmap(rotatedBitmap, newLeft, newTop, maxSide, maxSide)
-                croppedFaces.add(faceBitmap)
+                if (newLeft > 0 && newTop > 0 && maxSide > 0) {
+                    val faceBitmap = Bitmap.createBitmap(rotatedBitmap, newLeft, newTop, maxSide, maxSide)
+                    croppedFaces.add(faceBitmap)
+                }
             } catch (e: Exception) {
                 Log.e("FaceCrop", "Error Cropping the image: ${e.message}")
             }
